@@ -1,4 +1,4 @@
-class ListNode {
+public class ListNode {
     int val;
     ListNode next;
     ListNode() {}
@@ -75,4 +75,7 @@ public class Linked_list1 {
             d = d.next;
         }
     }
+}
+ {
+    
 }
