@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int n=5,x=1,y=x,ind=0,oo=0;
+    for(int i=0;i<n;i++){
+
+        for(int j=0;j<n-i-1;j++){
+            cout<<" ";
+        }
+        for(int j=0;j<n;j++){
+            if(ind==0){
+                cout<<x<<" ";
+                x++;
+            }
+            else{
+                cout<<y+n-1<<" ";
+                y--;
+            }
+
+        }
+        if(oo==0){
+            ind=1;
+            oo++;
+            y=x;
+        }
+        else{
+            ind=0;
+            oo--;
+            x=y+n+n;
+        }
+        cout<<endl;
+        
+    }
+}
