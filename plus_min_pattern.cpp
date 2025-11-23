@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include <windows.h>
 
 
 using namespace std;
@@ -40,7 +39,6 @@ int main(){
         }
         for(int j=0;j<vec[i];j++){
             cout<<"*";
-            Sleep(200);
         }
         }
         
@@ -50,7 +48,6 @@ int main(){
             }
             for(int j=0;j<-vec[i];j++){
                 cout<<"*";
-                Sleep(200);
             }
         }
         cout<<endl;

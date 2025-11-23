@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyTube (Local Player)</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #111;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header {
+        width: 100%;
+        padding: 15px;
+        background: #181818;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #mainWrapper {
+        width: 92%;
+        margin-top: 15px;
+        display: flex;
+        gap: 20px;
+        transition: 0.3s;
+    }
+
+    /* Theater mode makes video area full width and puts sidebar below */
+    body.theater #mainWrapper {
+        flex-direction: column;
+        width: 98%;
+    }
+
+    #videoContainer {
+        flex: 3;
+        background: #000;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    #sidePanel {
+        flex: 1;
+        background: #1e1e1e;
+        padding: 15px;
+        border-radius: 10px;
+        height: fit-content;
+    }
+
+    video {
+        width: 100%;
+        border-radius: 10px;
+        background: black;
+    }
+
+    #controls {
+        margin-top: 10px;
+        background: #222;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    #controls button, #controls select {
+        padding: 6px 10px;
+        margin: 5px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #333;
+        color: white;
+        font-size: 14px;
+    }
+
+    #controls button:hover {
+        background: #444;
+    }
+
+    #upload-box {
+        border: 2px dashed #555;
+        padding: 15px;
+        text-align: center;
+        border-radius: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    #upload-box.dragover {
+        background: #333;
+    }
+
+    #theater-btn {
+        padding: 8px 14px;
+        border-radius: 6px;
+        background: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h2>MyTube (Inspired)</h2>
+    <button id="theater-btn">🎬 Theater Mode</button>
+</header>
+
+<div id="mainWrapper">
+
+    <!-- LEFT: VIDEO PLAYER -->
+    <div id="videoContainer">
+        <video id="player" controls></video>
+
+        <!-- UNDER VIDEO CONTROLS -->
+        <div id="controls">
+            <button id="back5">⏪ -5s</button>
+            <button id="playpause">⏯ Play/Pause</button>
+            <button id="forward5">⏩ +5s</button>
+
+            <br><br>
+
+            <label>Speed:</label>
+            <select id="speedControl">
+                <option value="0.5">0.5×</option>
+                <option value="0.75">0.75×</option>
+                <option value="1" selected>1.0×</option>
+                <option value="1.25">1.25×</option>
+                <option value="1.5">1.5×</option>
+                <option value="2">2×</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- RIGHT: SIDEPANEL -->
+    <div id="sidePanel">
+        <h3>Load video</h3>
+
+        <div id="upload-box">
+            Drag & drop video here<br><br>
+            <input type="file" id="fileInput" accept="video/*">
+        </div>
+
+        <p style="opacity:0.7;margin-top:10px;">Supports: MP4, WebM, Ogg</p>
+    </div>
+
+</div>
+
+<script>
+const player = document.getElementById("player");
+const fileInput = document.getElementById("fileInput");
+const uploadBox = document.getElementById("upload-box");
+
+const back5 = document.getElementById("back5");
+const forward5 = document.getElementById("forward5");
+const playpause = document.getElementById("playpause");
+const speedControl = document.getElementById("speedControl");
+const theaterBtn = document.getElementById("theater-btn");
+
+/* Load video from file input */
+fileInput.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (file) loadVideo(file);
+});
+
+/* Drag & drop */
+uploadBox.addEventListener("dragover", e => {
+    e.preventDefault();
+    uploadBox.classList.add("dragover");
+});
+
+uploadBox.addEventListener("dragleave", () => {
+    uploadBox.classList.remove("dragover");
+});
+
+uploadBox.addEventListener("drop", e => {
+    e.preventDefault();
+    uploadBox.classList.remove("dragover");
+    const file = e.dataTransfer.files[0];
+    if (file) loadVideo(file);
+});
+
+/* Load video function */
+function loadVideo(file) {
+    const url = URL.createObjectURL(file);
+    player.src = url;
+    player.play();
+}
+
+/* FIX CLICK-TO-PAUSE */
+player.addEventListener("click", () => {
+    if (player.paused) player.play();
+    else player.pause();
+});
+
+/* BUTTON: play/pause */
+playpause.addEventListener("click", () => {
+    if (player.paused) player.play();
+    else player.pause();
+});
+
+/* BUTTON: -5 seconds */
+back5.addEventListener("click", () => {
+    player.currentTime = Math.max(0, player.currentTime - 5);
+});
+
+/* BUTTON: +5 seconds */
+forward5.addEventListener("click", () => {
+    player.currentTime = Math.min(player.duration, player.currentTime + 5);
+});
+
+/* Playback speed */
+speedControl.addEventListener("change", () => {
+    player.playbackRate = parseFloat(speedControl.value);
+});
+
+/* Theater mode toggle */
+theaterBtn.addEventListener("click", () => {
+    document.body.classList.toggle("theater");
+
+    if (document.body.classList.contains("theater")) {
+        theaterBtn.textContent = "❌ Exit Theater";
+    } else {
+        theaterBtn.textContent = "🎬 Theater Mode";
+    }
+});
+</script>
+
+</body>
+</html>
