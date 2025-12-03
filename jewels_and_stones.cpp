@@ -20,6 +20,6 @@ public:
 
 int main(){
     Solution obj;
-    cout<<obj.numJewelsInStones("z","ZZ");
+    cout<<obj.numJewelsInStones("aA","aAAbbbb");
     return 0;
 }
